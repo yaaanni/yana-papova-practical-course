@@ -1,6 +1,7 @@
 package com.github.yaaanni;
 
 import com.github.yaaanni.entities.*;
+import com.github.yaaanni.metrics.TotalIncome;
 import com.github.yaaanni.metrics.UniqueCities;
 
 import java.time.LocalDateTime;
@@ -85,7 +86,7 @@ public class Main {
                                 .setCategory(Category.ELECTRONICS)
                                 .build()
                 ))
-                .setStatus(OrderStatus.NEW)
+                .setStatus(OrderStatus.DELIVERED)
                 .build());
         orders.add(Order
                 .builder()
@@ -126,6 +127,7 @@ public class Main {
                 .setStatus(OrderStatus.NEW)
                 .build());
         System.out.println(UniqueCities.getUniqueCities(orders));
+        System.out.println(TotalIncome.getTotalIncome(orders));
 
 
     }

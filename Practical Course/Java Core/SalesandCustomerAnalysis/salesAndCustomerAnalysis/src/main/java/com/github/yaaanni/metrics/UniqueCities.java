@@ -7,8 +7,7 @@ import java.util.List;
 public class UniqueCities {
     public static List<String> getUniqueCities(List<Order> orders){
         return  orders.stream()
-                .map(c -> c.getCustomer()
-                .getCity())
+                .map(c -> c.getCustomer().getCity())
                 .distinct()
                 .toList();
     }

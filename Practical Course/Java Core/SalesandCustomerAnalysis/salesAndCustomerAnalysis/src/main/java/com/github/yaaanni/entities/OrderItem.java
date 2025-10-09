@@ -12,6 +12,15 @@ public class OrderItem {
         this.price = price;
         this.category = category;
     }
+
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+
     public static OrderItemBuilder builder(){
         return new OrderItemBuilder();
     }

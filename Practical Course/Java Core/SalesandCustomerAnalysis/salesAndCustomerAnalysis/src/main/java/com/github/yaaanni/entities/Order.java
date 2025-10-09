@@ -19,6 +19,14 @@ public class Order {
         this.status = status;
     }
 
+    public OrderStatus getStatus() {
+        return status;
+    }
+
+    public List<OrderItem> getItems() {
+        return items;
+    }
+
     public Customer getCustomer() {
         return customer;
     }
@@ -27,33 +35,39 @@ public class Order {
         return new OrderBuilder();
     }
 
-    public static class OrderBuilder{
+    public static class OrderBuilder {
         private String orderId;
         private LocalDateTime orderDate;
         private Customer customer;
         private List<OrderItem> items;
         private OrderStatus status;
-        public OrderBuilder setOrderId(String orderId){
+
+        public OrderBuilder setOrderId(String orderId) {
             this.orderId = orderId;
             return this;
         }
-        public OrderBuilder setOrderDate(LocalDateTime orderDate){
+
+        public OrderBuilder setOrderDate(LocalDateTime orderDate) {
             this.orderDate = orderDate;
             return this;
         }
-        public OrderBuilder setCustomer(Customer customer){
+
+        public OrderBuilder setCustomer(Customer customer) {
             this.customer = customer;
             return this;
         }
-        public OrderBuilder setItems(List<OrderItem> items){
+
+        public OrderBuilder setItems(List<OrderItem> items) {
             this.items = items;
             return this;
         }
-        public OrderBuilder setStatus(OrderStatus status){
+
+        public OrderBuilder setStatus(OrderStatus status) {
             this.status = status;
             return this;
         }
-        public Order build(){
+
+        public Order build() {
             return new Order(orderId, orderDate, customer, items, status);
         }
     }
