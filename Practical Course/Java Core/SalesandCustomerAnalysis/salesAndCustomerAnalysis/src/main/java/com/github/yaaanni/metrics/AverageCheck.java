@@ -6,7 +6,7 @@ import com.github.yaaanni.entities.OrderStatus;
 import java.util.List;
 
 public class AverageCheck {
-    public static double averageCheck(List<Order> orders){
+    public static double getAverageCheck(List<Order> orders){
         return orders.stream()
                 .filter(o -> o.getStatus() == OrderStatus.DELIVERED)
                 .mapToDouble(o -> o.getItems().stream()
