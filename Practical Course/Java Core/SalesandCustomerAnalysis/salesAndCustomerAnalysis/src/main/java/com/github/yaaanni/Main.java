@@ -1,6 +1,7 @@
 package com.github.yaaanni;
 
 import com.github.yaaanni.entities.*;
+import com.github.yaaanni.metrics.AverageCheck;
 import com.github.yaaanni.metrics.MostPopular;
 import com.github.yaaanni.metrics.TotalIncome;
 import com.github.yaaanni.metrics.UniqueCities;
@@ -29,26 +30,26 @@ public class Main {
                         OrderItem
                                 .builder()
                                 .setProductName("Chair")
-                                .setQuantity(15)
-                                .setPrice(200)
+                                .setQuantity(2)
+                                .setPrice(10)
                                 .setCategory(Category.HOME)
                                 .build(),
                         OrderItem
                                 .builder()
                                 .setProductName("Doll")
                                 .setQuantity(20)
-                                .setPrice(300)
+                                .setPrice(1)
                                 .setCategory(Category.TOYS)
                                 .build(),
                         OrderItem
                                 .builder()
                                 .setProductName("Phone")
                                 .setQuantity(2)
-                                .setPrice(3000)
+                                .setPrice(7)
                                 .setCategory(Category.ELECTRONICS)
                                 .build()
                 ))
-                .setStatus(OrderStatus.NEW)
+                .setStatus(OrderStatus.DELIVERED)
                 .build());
 
         orders.add(Order
@@ -68,22 +69,22 @@ public class Main {
                         OrderItem
                                 .builder()
                                 .setProductName("Chair")
-                                .setQuantity(15)
-                                .setPrice(200)
+                                .setQuantity(5)
+                                .setPrice(9)
                                 .setCategory(Category.HOME)
                                 .build(),
                         OrderItem
                                 .builder()
                                 .setProductName("Doll")
-                                .setQuantity(20)
-                                .setPrice(300)
+                                .setQuantity(3)
+                                .setPrice(1)
                                 .setCategory(Category.TOYS)
                                 .build(),
                         OrderItem
                                 .builder()
                                 .setProductName("Phone")
-                                .setQuantity(2)
-                                .setPrice(3000)
+                                .setQuantity(9)
+                                .setPrice(4)
                                 .setCategory(Category.ELECTRONICS)
                                 .build()
                 ))
@@ -130,6 +131,6 @@ public class Main {
         System.out.println(UniqueCities.getUniqueCities(orders));
         System.out.println(TotalIncome.getTotalIncome(orders));
         System.out.println(MostPopular.getMostPopular(orders));
-
+        System.out.println(AverageCheck.averageCheck(orders));
     }
 }

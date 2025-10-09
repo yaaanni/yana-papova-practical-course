@@ -15,7 +15,7 @@ public class MostPopular {
                 .entrySet().stream()
                 .max(Map.Entry.comparingByValue())
                 .map(e -> e.getKey())
-                .orElse(null);
+                .orElseThrow();
 
     }
 }
