@@ -1,6 +1,7 @@
 package com.github.yaaanni;
 
 import com.github.yaaanni.entities.*;
+import com.github.yaaanni.metrics.MostPopular;
 import com.github.yaaanni.metrics.TotalIncome;
 import com.github.yaaanni.metrics.UniqueCities;
 
@@ -128,7 +129,7 @@ public class Main {
                 .build());
         System.out.println(UniqueCities.getUniqueCities(orders));
         System.out.println(TotalIncome.getTotalIncome(orders));
-
+        System.out.println(MostPopular.getMostPopular(orders));
 
     }
 }

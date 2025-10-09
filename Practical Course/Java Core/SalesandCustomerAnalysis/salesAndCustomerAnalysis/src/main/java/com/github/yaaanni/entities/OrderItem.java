@@ -13,6 +13,10 @@ public class OrderItem {
         this.category = category;
     }
 
+    public String getProductName() {
+        return productName;
+    }
+
     public int getQuantity() {
         return quantity;
     }
