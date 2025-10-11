@@ -2,9 +2,10 @@ package com.github.yaaanni.details;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class RequiredDetails {
-    private static Map<TypeDetail, Integer> requiredDetails = new HashMap<>();
+    private static ConcurrentHashMap<TypeDetail, Integer> requiredDetails = new ConcurrentHashMap<>();
 
     static {
         requiredDetails.put(TypeDetail.HEAD, 1);
@@ -13,20 +14,20 @@ public class RequiredDetails {
         requiredDetails.put(TypeDetail.LEG, 2);
     }
 
-    public static Map<TypeDetail, Integer> getRequiredDetails() {
+    public static ConcurrentHashMap<TypeDetail, Integer> getRequiredDetails() {
         return requiredDetails;
     }
 
-    public static boolean ifEnough(Map<TypeDetail, Integer> details) {
+    public static boolean ifEnough(ConcurrentHashMap<TypeDetail, Integer> details) {
         for (Map.Entry<TypeDetail, Integer> entry : requiredDetails.entrySet()) {
             TypeDetail detail = entry.getKey();
             int requiredCount = entry.getValue();
             int availableCount = details.getOrDefault(detail, 0);
-            if (requiredCount <= availableCount) {
-                return true;
+            if (availableCount < requiredCount) {
+                return false;
             }
-
         }
-        return false;
+        return true;
     }
+
 }
