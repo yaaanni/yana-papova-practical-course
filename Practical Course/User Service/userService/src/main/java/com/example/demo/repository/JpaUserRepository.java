@@ -13,7 +13,7 @@ import java.util.Optional;
 public interface JpaUserRepository extends JpaRepository<User, Long> {
     User save(User user);
 
-    @Query("SELECT u FROM User u JOIN FETCH u.cards WHERE u.id = :id")
+    @Query("SELECT u FROM User u LEFT JOIN FETCH u.cards WHERE u.id = :id")
     Optional<User> getUserById(@Param("id") Long id);
 
     @EntityGraph(attributePaths = {"cards"})
