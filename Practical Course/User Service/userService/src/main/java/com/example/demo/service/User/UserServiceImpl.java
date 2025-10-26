@@ -12,6 +12,10 @@ import com.example.demo.repository.JpaUserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -28,50 +32,47 @@ public class UserServiceImpl implements UserService {
     private final CardMapping cardMapping;
 
     @Override
+    @CachePut(value = "users", key = "#result.id")
     public UserDto createUser(UserDto dto) {
         User user = jpaUserRepository.save(userMapping.toEntity(dto));
         return userMapping.toDto(user);
     }
 
     @Override
+    @Cacheable(value = "users", key = "#id")
     public UserDto getUserById(Long id) {
-        User user = jpaUserRepository.getUserById(id)
-                .orElseThrow(() -> new UserNotFoundException(id));
+        User user = jpaUserRepository.getUserById(id).orElseThrow(() -> new UserNotFoundException(id));
         return userMapping.toDto(user);
     }
 
     @Override
     public Page<UserDto> getAllUsers(Pageable pageable) {
         Page<User> users = jpaUserRepository.findAll(pageable);
-        return users
-                .map(user -> userMapping.toDto(user));
+        return users.map(user -> userMapping.toDto(user));
     }
 
     @Override
+    @Cacheable(value = "users", key = "#email")
     public UserDto getUserByEmail(String email) {
-        User user = jpaUserRepository.findUserByEmail(email)
-                .orElseThrow(() -> new UserEmailNotFoundException(email));
+        User user = jpaUserRepository.findUserByEmail(email).orElseThrow(() -> new UserEmailNotFoundException(email));
         return userMapping.toDto(user);
     }
 
     @Override
     @Transactional
+    @CachePut(value = "users", key = "#id")
     public UserDto updateUserById(Long id, UserDto dto) {
-        User user = jpaUserRepository.getUserById(id)
-                .orElseThrow(() -> new UserNotFoundException(id));
+        User user = jpaUserRepository.getUserById(id).orElseThrow(() -> new UserNotFoundException(id));
         user.setName(dto.getName());
         user.setSurname(dto.getSurname());
         user.setBirthDay(dto.getBirthDay());
         user.setEmail(dto.getEmail());
         if (dto.getCards() != null) {
-            List<Card> newCards = dto.getCards().
-                    stream()
-                    .map(cardDto -> {
-                        Card card = cardMapping.toEntity(cardDto);
-                        card.setUser(user);
-                        return card;
-                    })
-                    .collect(Collectors.toList());
+            List<Card> newCards = dto.getCards().stream().map(cardDto -> {
+                Card card = cardMapping.toEntity(cardDto);
+                card.setUser(user);
+                return card;
+            }).collect(Collectors.toList());
             user.getCards().clear();
             user.getCards().addAll(newCards);
         }
@@ -80,9 +81,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
+    @CacheEvict(value = "users", key = "#id")
     public void deleteUserById(Long id) {
-        User user = jpaUserRepository.getUserById(id)
-                .orElseThrow(() -> new UserNotFoundException(id));
+        User user = jpaUserRepository.getUserById(id).orElseThrow(() -> new UserNotFoundException(id));
         jpaUserRepository.deleteById(id);
     }
 }

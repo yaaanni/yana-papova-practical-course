@@ -19,7 +19,6 @@ public class CardDto {
     @Positive(message = "User ID must be a positive number")
     private Long userId;
     @NotNull(message = "Card number is required")
-    @NotNull(message = "Card number is required")
     @Min(value = 1000000000000000L, message = "Card number must be 16 digits")
     @Max(value = 9999999999999999L, message = "Card number must be 16 digits")
     private Long number;
