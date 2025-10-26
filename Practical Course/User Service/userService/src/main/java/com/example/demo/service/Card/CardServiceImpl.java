@@ -4,6 +4,7 @@ import com.example.demo.dto.CardDto;
 import com.example.demo.dto.mapping.CardMapping;
 import com.example.demo.entities.Card;
 import com.example.demo.entities.User;
+import com.example.demo.exception.CardNotFoundException;
 import com.example.demo.repository.JpaCardRepository;
 import com.example.demo.repository.JpaUserRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -49,6 +50,19 @@ public class CardServiceImpl implements CardService {
         Card card = jpaCardRepository.getCardById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Card not found"));
         jpaCardRepository.deleteById(id);
+    }
+
+    @Override
+    @Transactional
+    public CardDto updateCard(Long id, CardDto dto) {
+        Card cardForUpdate = jpaCardRepository.getCardById(id)
+                .orElseThrow(() -> new CardNotFoundException(id));
+        User user = jpaUserRepository.getUserById(dto.getUserId())
+                .orElseThrow(() -> new UserNotFoundException(dto.getUserId()));
+        cardForUpdate.setUser(user);
+        cardForUpdate.setHolder(dto.getHolder());
+        cardForUpdate.setNumber(dto.getNumber());
+        return cardMapping.toDto(jpaCardRepository.save(cardForUpdate));
     }
 
 }

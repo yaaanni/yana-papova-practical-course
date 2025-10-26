@@ -22,7 +22,7 @@ public class CardDto {
     @NotNull(message = "Card number is required")
     @Min(value = 1000000000000000L, message = "Card number must be 16 digits")
     @Max(value = 9999999999999999L, message = "Card number must be 16 digits")
-    private Long number;
+    private Integer number;
     @NotNull(message = "Holder is required")
     private String holder;
     @NotNull(message = "Expiration date is required")

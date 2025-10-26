@@ -12,4 +12,6 @@ public interface CardService {
     Page<CardDto> getAllCards(Pageable pageable);
 
     void deleteCardById(Long id);
+
+    CardDto updateCard(Long id, CardDto dto);
 }
