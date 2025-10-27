@@ -1,5 +1,6 @@
 package com.example.demo.service.User;
 
+import com.example.demo.dto.CardDto;
 import com.example.demo.dto.UserDto;
 import com.example.demo.dto.mapping.CardMapping;
 import com.example.demo.dto.mapping.UserMapping;
@@ -34,9 +35,24 @@ public class UserServiceImpl implements UserService {
     @Override
     @CachePut(value = "users", key = "#result.id")
     public UserDto createUser(UserDto dto) {
+        List<CardDto> dtoCards = dto.getCards();
+        dto.setCards(null);
         User user = jpaUserRepository.save(userMapping.toEntity(dto));
+        if (dtoCards != null && !dtoCards.isEmpty()) {
+            List<Card> cards = dtoCards
+                    .stream()
+                    .map(c -> {
+                        Card card = cardMapping.toEntity(c);
+                        card.setUser(user);
+                        return card;
+                    })
+                    .toList();
+            jpaCardRepository.saveAll(cards);
+            user.setCards(cards);
+        }
         return userMapping.toDto(user);
     }
+
 
     @Override
     @Cacheable(value = "users", key = "#id")
