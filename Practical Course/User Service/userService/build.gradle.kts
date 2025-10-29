@@ -40,6 +40,14 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-data-redis")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310")
+    testImplementation("org.springframework.boot:spring-boot-starter-test")
+    testImplementation("org.mockito:mockito-junit-jupiter:5.7.0")
+    testImplementation("org.assertj:assertj-core:3.26.3")
+    implementation("org.springframework.boot:spring-boot-starter-data-jpa")
+    testImplementation("org.testcontainers:testcontainers:1.20.3")
+    testImplementation("org.testcontainers:postgresql:1.20.3")
+    testImplementation("org.testcontainers:junit-jupiter:1.20.3")
+
 }
 
 tasks.withType<Test> {
