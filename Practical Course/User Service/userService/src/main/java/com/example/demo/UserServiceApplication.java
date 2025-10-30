@@ -36,23 +36,23 @@ public class UserServiceApplication {
 
     @EventListener(ApplicationReadyEvent.class)
     public void start() {
-        User user = new User();
-        user.setName("Olya");
-        user.setSurname("Lisichkina");
-        user.setBirthDay(LocalDate.of(2007, 02, 02));
-        user.setEmail("masha@gmail.com");
-        Card cardForOlya = new Card();
-        cardForOlya.setUser(user);
-        cardForOlya.setExpirationDate(LocalDate.of(2027, 9, 9));
-        cardForOlya.setHolder("Masha Lisichkina");
-        cardForOlya.setNumber(1111);
-        user.setCards(new ArrayList<>());
-        user.getCards().add(cardForOlya);
-        UserDto dto = userMapping.toDto(user);
-        userService.updateUserById(12L, dto);
+//        User user = new User();
+//        user.setName("Olya");
+//        user.setSurname("Lisichkina");
+//        user.setBirthDay(LocalDate.of(2007, 02, 02));
+//        user.setEmail("masha@gmail.com");
+//        Card cardForOlya = new Card();
+//        cardForOlya.setUser(user);
+//        cardForOlya.setExpirationDate(LocalDate.of(2027, 9, 9));
+//        cardForOlya.setHolder("Masha Lisichkina");
+//        cardForOlya.setNumber(1111);
+//        user.setCards(new ArrayList<>());
+//        user.getCards().add(cardForOlya);
+//        UserDto dto = userMapping.toDto(user);
+//        userService.updateUserById(12L, dto);
 
 
-        Card cardForMasha = new Card();
+//        Card cardForMasha = new Card();
 //        User nastya = new User();
 //        nastya.setId(7L);
 //        nastya.setName("Anastasia");
@@ -66,15 +66,15 @@ public class UserServiceApplication {
 //        masha.setSurname("Lisichkina");
 //        masha.setBirthDay(LocalDate.of(2007, 02, 02));
 //        masha.setEmail("masha@gmail.com");
-        Optional<User> masha = jpaUserRepository.getUserById(12L);
-
-        cardForMasha.setUser(masha.get());
-        cardForMasha.setExpirationDate(LocalDate.of(2027, 9, 9));
-        cardForMasha.setHolder("Masha Lis");
-        cardForMasha.setNumber(1111);
-        masha.get().setCards(new ArrayList<>());
-        masha.get().getCards().add(cardForMasha);
-        jpaUserRepository.save(masha.get());
+//        Optional<User> masha = jpaUserRepository.getUserById(12L);
+//
+//        cardForMasha.setUser(masha.get());
+//        cardForMasha.setExpirationDate(LocalDate.of(2027, 9, 9));
+//        cardForMasha.setHolder("Masha Lis");
+//        cardForMasha.setNumber(1111);
+//        masha.get().setCards(new ArrayList<>());
+//        masha.get().getCards().add(cardForMasha);
+//        jpaUserRepository.save(masha.get());
 
 
 //        jpaUserRepository.save(masha);

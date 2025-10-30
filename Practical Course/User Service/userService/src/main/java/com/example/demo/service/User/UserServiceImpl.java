@@ -6,11 +6,14 @@ import com.example.demo.dto.mapping.CardMapping;
 import com.example.demo.dto.mapping.UserMapping;
 import com.example.demo.entities.Card;
 import com.example.demo.entities.User;
+import com.example.demo.exception.UserEmailNotFoundException;
+import com.example.demo.exception.UserNotFoundException;
 import com.example.demo.repository.JpaCardRepository;
 import com.example.demo.repository.JpaUserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CachePut;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -50,7 +53,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDto getUserById(Long id) {
         User user = jpaUserRepository.getUserById(id)
-                .orElseThrow(() -> new EntityNotFoundException("User not found"));
+                .orElseThrow(() -> new UserNotFoundException(id));
         return userMapping.toDto(user);
     }
 
@@ -64,7 +67,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDto getUserByEmail(String email) {
         User user = jpaUserRepository.findUserByEmail(email)
-                .orElseThrow(() -> new EntityNotFoundException("User not found"));
+                .orElseThrow(() -> new UserEmailNotFoundException(email));
         return userMapping.toDto(user);
     }
 
@@ -72,7 +75,7 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public UserDto updateUserById(Long id, UserDto dto) {
         User user = jpaUserRepository.getUserById(id)
-                .orElseThrow(() -> new EntityNotFoundException("User not found"));
+                .orElseThrow(() -> new UserNotFoundException(id));
         user.setName(dto.getName());
         user.setSurname(dto.getSurname());
         user.setBirthDay(dto.getBirthDay());
@@ -96,7 +99,7 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public void deleteUserById(Long id) {
         User user = jpaUserRepository.getUserById(id)
-                .orElseThrow(() -> new EntityNotFoundException("User not found"));
+                .orElseThrow(() -> new UserNotFoundException(id));
         jpaUserRepository.deleteById(id);
     }
 }

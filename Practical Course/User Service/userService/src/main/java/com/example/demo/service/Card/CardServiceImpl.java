@@ -5,6 +5,7 @@ import com.example.demo.dto.mapping.CardMapping;
 import com.example.demo.entities.Card;
 import com.example.demo.entities.User;
 import com.example.demo.exception.CardNotFoundException;
+import com.example.demo.exception.UserNotFoundException;
 import com.example.demo.repository.JpaCardRepository;
 import com.example.demo.repository.JpaUserRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -25,7 +26,7 @@ public class CardServiceImpl implements CardService {
     public CardDto createCard(CardDto dto) {
         Card card = cardMapping.toEntity(dto);
         User user = jpaUserRepository.getUserById(dto.getUserId())
-                .orElseThrow(() -> new EntityNotFoundException("Card not found"));
+                .orElseThrow(() -> new UserNotFoundException(dto.getUserId()));
         card.setUser(user);
         return cardMapping.toDto(jpaCardRepository.save(card));
     }
@@ -33,7 +34,7 @@ public class CardServiceImpl implements CardService {
     @Override
     public CardDto getCardById(Long id) {
         Card card = jpaCardRepository.getCardById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Card not found"));
+                .orElseThrow(() -> new CardNotFoundException(id));
         return cardMapping.toDto(card);
     }
 
@@ -48,7 +49,7 @@ public class CardServiceImpl implements CardService {
     @Transactional
     public void deleteCardById(Long id) {
         Card card = jpaCardRepository.getCardById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Card not found"));
+                .orElseThrow(() -> new CardNotFoundException(id));
         jpaCardRepository.deleteById(id);
     }
 
