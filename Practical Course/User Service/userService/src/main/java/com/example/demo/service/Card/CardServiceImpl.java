@@ -4,16 +4,18 @@ import com.example.demo.dto.CardDto;
 import com.example.demo.dto.mapping.CardMapping;
 import com.example.demo.entities.Card;
 import com.example.demo.entities.User;
+import com.example.demo.exception.CardAlreadyExist;
 import com.example.demo.exception.CardNotFoundException;
 import com.example.demo.exception.UserNotFoundException;
 import com.example.demo.repository.JpaCardRepository;
 import com.example.demo.repository.JpaUserRepository;
-import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -24,6 +26,9 @@ public class CardServiceImpl implements CardService {
 
     @Override
     public CardDto createCard(CardDto dto) {
+        if (jpaCardRepository.existsByNumber(dto.getNumber())) {
+            throw new CardAlreadyExist(dto.getNumber());
+        }
         Card card = cardMapping.toEntity(dto);
         User user = jpaUserRepository.getUserById(dto.getUserId())
                 .orElseThrow(() -> new UserNotFoundException(dto.getUserId()));

@@ -4,6 +4,7 @@ import com.example.demo.dto.CardDto;
 import com.example.demo.dto.mapping.CardMapping;
 import com.example.demo.entities.Card;
 import com.example.demo.entities.User;
+import com.example.demo.exception.CardAlreadyExist;
 import com.example.demo.exception.CardNotFoundException;
 import com.example.demo.exception.UserNotFoundException;
 import com.example.demo.repository.JpaCardRepository;
@@ -101,8 +102,7 @@ class CardServiceImplTest {
     }
 
     @Test
-    void getCardByIdException() {
-        Long id = 5L;
+    void shouldThrowExceptionWhenCardAlreadyExists() {
         CardDto dto = new CardDto(
                 null,
                 1L,
@@ -118,12 +118,27 @@ class CardServiceImplTest {
                 "nastya@gmail.com",
                 new ArrayList<>()
         );
-        Card card = new Card(
-                6L,
-                user,
+        CardDto dtoException = new CardDto(
+                null,
+                1L,
                 1234123412341234L,
-                "Anastasia Krivchik",
+                "Anastasia",
                 LocalDate.of(2026, 10, 3)
+        );
+        when(jpaCardRepository.existsByNumber(dto.getNumber())).thenReturn(true);
+        assertThrows(CardAlreadyExist.class, () -> cardService.createCard(dtoException));
+    }
+
+    @Test
+    void getCardByIdException() {
+        Long id = 5L;
+        User user = new User(
+                null,
+                "Anastasia",
+                "Krivchik",
+                LocalDate.of(2007, 03, 04),
+                "nastya@gmail.com",
+                new ArrayList<>()
         );
         when(jpaCardRepository.getCardById(id)).thenReturn(Optional.empty());
         assertThrows(CardNotFoundException.class, () -> cardService.getCardById(id));
@@ -210,21 +225,6 @@ class CardServiceImplTest {
     @Test
     void deleteCardByIdException() {
         Long id = 5L;
-        User user = new User(
-                null,
-                "Anastasia",
-                "Krivchik",
-                LocalDate.of(2007, 03, 04),
-                "nastya@gmail.com",
-                new ArrayList<>()
-        );
-        Card card = new Card(
-                7L,
-                user,
-                1234123412341234L,
-                "Anastasia Krivchik",
-                LocalDate.of(2026, 10, 3)
-        );
         when(jpaCardRepository.getCardById(id)).thenReturn(Optional.empty());
         assertThrows(CardNotFoundException.class, () -> cardService.deleteCardById(id));
     }
@@ -309,7 +309,7 @@ class CardServiceImplTest {
         );
 
         Card existingCard = new Card(
-                id,
+                null,
                 null,
                 1234123412341234L,
                 "Old Holder",

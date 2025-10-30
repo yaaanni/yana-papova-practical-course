@@ -4,6 +4,7 @@ import com.example.demo.dto.CardDto;
 import com.example.demo.dto.UserDto;
 import com.example.demo.dto.mapping.CardMapping;
 import com.example.demo.entities.Card;
+import com.example.demo.exception.CardAlreadyExist;
 import com.example.demo.exception.CardNotFoundException;
 import com.example.demo.exception.UserNotFoundException;
 import com.example.demo.repository.JpaCardRepository;
@@ -89,6 +90,34 @@ public class CardServiceImplIntegrationTest {
         Optional<Card> cardFromDb = cardRepository.getCardById(savedCard.getId());
         assertTrue(cardFromDb.isPresent());
         assertEquals(savedUser.getId(), cardFromDb.get().getUser().getId());
+    }
+
+    @Test
+    void shouldThrowExceptionWhenCardAlreadyExist() {
+        UserDto userDto = new UserDto(
+                null,
+                "Anastasia",
+                "Krivchik",
+                LocalDate.of(2007, 3, 4),
+                "nastya@gmail.com",
+                new ArrayList<>());
+        UserDto savedUser = userService.createUser(userDto);
+        CardDto cardDto = new CardDto(
+                null,
+                savedUser.getId(),
+                1234123412341234L,
+                "Anastasia Krivchik",
+                LocalDate.of(2026, 9, 6)
+        );
+        CardDto savedCard = cardService.createCard(cardDto);
+        CardDto cardDtoException = new CardDto(
+                null,
+                savedUser.getId(),
+                1234123412341234L,
+                "Anastasia Krivchik",
+                LocalDate.of(2026, 9, 6)
+        );
+        assertThrows(CardAlreadyExist.class, () -> cardService.createCard(cardDtoException));
     }
 
     @Test
@@ -223,7 +252,7 @@ public class CardServiceImplIntegrationTest {
         CardDto cardDto = new CardDto(
                 null,
                 savedUser.getId(),
-                1234123412341234L,
+                1234123412341235L,
                 "Milana Krivchik",
                 LocalDate.of(2026, 9, 6)
         );

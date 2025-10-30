@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @AllArgsConstructor
@@ -23,7 +24,8 @@ public class User {
     private String surname;
     @Column(name = "birth_day")
     private LocalDate birthDay;
+    @Column(unique = true, nullable = false)
     private String email;
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Card> cards;
+    private List<Card> cards = new ArrayList<>();
 }

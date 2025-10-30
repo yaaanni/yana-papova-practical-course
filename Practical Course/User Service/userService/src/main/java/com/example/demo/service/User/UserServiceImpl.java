@@ -6,6 +6,7 @@ import com.example.demo.dto.mapping.CardMapping;
 import com.example.demo.dto.mapping.UserMapping;
 import com.example.demo.entities.Card;
 import com.example.demo.entities.User;
+import com.example.demo.exception.UserAlreadyExists;
 import com.example.demo.exception.UserEmailNotFoundException;
 import com.example.demo.exception.UserNotFoundException;
 import com.example.demo.repository.JpaCardRepository;
@@ -19,6 +20,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -33,10 +35,13 @@ public class UserServiceImpl implements UserService {
     @Override
     @CachePut(value = "users", key = "#result.id")
     public UserDto createUser(UserDto dto) {
+        if (jpaUserRepository.findUserByEmail(dto.getEmail()).isPresent()) {
+            throw new UserAlreadyExists(dto.getEmail());
+        }
         List<CardDto> dtoCards = dto.getCards();
-        dto.setCards(null);
+        dto.setCards(new ArrayList<>());
         User user = jpaUserRepository.save(userMapping.toEntity(dto));
-        if (dtoCards != null && !dtoCards.isEmpty()) {
+        if (!dtoCards.isEmpty()) {
             List<Card> cards = dtoCards
                     .stream()
                     .map(c -> {

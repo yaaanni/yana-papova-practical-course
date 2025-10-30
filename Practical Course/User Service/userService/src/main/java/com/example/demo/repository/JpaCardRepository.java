@@ -22,4 +22,6 @@ public interface JpaCardRepository extends JpaRepository<Card, Long> {
     @Modifying
     @Query(value = "DELETE FROM card_info WHERE id = :id", nativeQuery = true)
     void deleteById(@Param("id") Long id);
+
+    boolean existsByNumber(Long number);
 }

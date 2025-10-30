@@ -30,7 +30,17 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(UserEmailNotFoundException.class)
-    public ResponseEntity<String> userEmailNotFound(UserEmailNotFoundException ex){
+    public ResponseEntity<String> userEmailNotFound(UserEmailNotFoundException ex) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+    }
+
+    @ExceptionHandler(UserAlreadyExists.class)
+    public ResponseEntity<String> userAlreadyExists(UserAlreadyExists ex) {
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(ex.getMessage());
+    }
+
+    @ExceptionHandler(CardAlreadyExist.class)
+    public ResponseEntity<String> cardAlreadyExist(CardAlreadyExist ex) {
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(ex.getMessage());
     }
 }

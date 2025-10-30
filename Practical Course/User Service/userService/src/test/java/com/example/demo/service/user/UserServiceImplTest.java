@@ -6,6 +6,7 @@ import com.example.demo.dto.mapping.CardMapping;
 import com.example.demo.dto.mapping.UserMapping;
 import com.example.demo.entities.Card;
 import com.example.demo.entities.User;
+import com.example.demo.exception.UserAlreadyExists;
 import com.example.demo.exception.UserEmailNotFoundException;
 import com.example.demo.exception.UserNotFoundException;
 import com.example.demo.repository.JpaCardRepository;
@@ -102,6 +103,33 @@ public class UserServiceImplTest {
         assertEquals(dto, userService.createUser(dto));
         verify(jpaUserRepository).save(userEntity);
         verify(jpaCardRepository).saveAll(List.of(cardEntity));
+    }
+
+    @Test
+    void shouldThrowExceptionWhenUserAlreadyExists() {
+        UserDto dto = new UserDto(
+                null,
+                "Anastasia",
+                "Krivchik",
+                LocalDate.of(2007, 3, 4),
+                "nastya@gmail.com",
+                new ArrayList<>());
+        User userEntity = new User(
+                1L,
+                "Anastasia",
+                "Krivchik",
+                LocalDate.of(2007, 3, 4),
+                "nastya@gmail.com",
+                new ArrayList<>());
+        UserDto dtoException = new UserDto(
+                null,
+                "Anastasia",
+                "Krivchik",
+                LocalDate.of(2007, 3, 4),
+                "nastya@gmail.com",
+                new ArrayList<>());
+        when(jpaUserRepository.findUserByEmail(dto.getEmail())).thenReturn(Optional.of(userEntity));
+        assertThrows(UserAlreadyExists.class, () -> userService.createUser(dtoException));
     }
 
     @Test

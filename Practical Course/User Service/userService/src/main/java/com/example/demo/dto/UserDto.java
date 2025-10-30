@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -29,5 +30,5 @@ public class UserDto {
     private LocalDate birthDay;
     @NotNull(message = "Email is required")
     private String email;
-    private List<CardDto> cards;
+    private List<CardDto> cards = new ArrayList<>();
 }

@@ -21,6 +21,7 @@ public class Card {
     @ManyToOne()
     @JoinColumn(name = "user_id")
     private User user;
+    @Column(unique = true, nullable = false)
     private Long number;
     private String holder;
     @Column(name = "expiration_date")
